@@ -1,5 +1,4 @@
 import Link from "next/link";
-import BlogList from "@/components/blogs/BlogList";
 
 async function getBlogs(searchParams) {
 // console.log("search params =>", serachParams)
@@ -24,7 +23,7 @@ async function getBlogs(searchParams) {
   return data; // {blogs, currentPage, totalPages}
 }
 
-export default async function Home({ searchParams }) {
+export default async function AdminBlogsList({ searchParams }) {
   
   const data = await getBlogs(searchParams);
   // console.log("data in home page =>", data);
@@ -34,11 +33,18 @@ export default async function Home({ searchParams }) {
 
 
   return (
-    <div>
-      <p className="lead text-primary">Home</p>
+    <div className="container">
+      <p className="lead text-primary text-center">Latest Blogs</p>
 
-      <BlogList blogs={blogs}/>
-      {/* <pre>{JSON.stringify(data, null, 4)}</pre> */}
+      {blogs.map((blog) => (
+        <div key={blog._id} className="d-flex justify-content-between">
+          <p>{blog.title}</p>
+          <Link 
+            className="text-danger" 
+            href={`/dashboard/admin/blog/update/${blog.slug}`}>Update</Link>
+        </div>
+
+      ))}
 
       <div className="d-flex justify-content-center">
         <nav aria-label = "Page navigation">
