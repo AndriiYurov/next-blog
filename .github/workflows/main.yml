@@ -8,21 +8,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [18.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
         with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build app
-        run: npm run build
-
+           node-version: ${{ matrix.node-version }}
+           cache: 'npm'
+      - run: npm ci
+      
+      - run: |
+          touch config.js
+          echo "${{ secrets.CONFIG_ENV_FILE }}" > config.js
+      - run: npm run build
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@master
         with:
