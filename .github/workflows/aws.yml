@@ -27,15 +27,19 @@ jobs:
           echo "${{ secrets.CONFIG_ENV_FILE }}" > config.js
       - run: npm run build
 
-      - name: Zip build artifacts
-        run: zip -r build.zip
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-without-markdown
+          path: |
+            build
 
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --acl public-read
         env:
-          SOURCE_DIR: ./build.zip
+          SOURCE_DIR: build
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
