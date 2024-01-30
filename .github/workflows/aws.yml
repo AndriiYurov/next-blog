@@ -27,6 +27,9 @@ jobs:
           echo "${{ secrets.CONFIG_ENV_FILE }}" > config.js
       - run: npm run build
 
+      - name: Make artifact directory
+        run: mkdir -p ./artifacts
+
       - name: Zip artifact for deployment
         run: zip ./artifacts/release.zip ./* -r
 
