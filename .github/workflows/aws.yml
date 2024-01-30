@@ -28,10 +28,8 @@ jobs:
       - run: npm run build
 
       - name: Zip artifact for deployment
-        #run: zip release.zip ./* -r
-        run: zip -r ./artifacts/release.zip ./*
+        run: zip ./artifacts/release.zip ./* -r
 
-      
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@master
         with:
