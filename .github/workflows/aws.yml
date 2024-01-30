@@ -27,23 +27,17 @@ jobs:
           echo "${{ secrets.CONFIG_ENV_FILE }}" > config.js
       - run: npm run build
 
-      - name: Upload File to AWS S3
-        uses: ramonpaolo/action-upload-s3@main
+      - name: Zip artifact for deployment
+        #run: zip release.zip ./* -r
+        run: zip -r ./artifacts/release.zip ./*
+
+      
+      - name: Upload to S3
+        uses: jakejarvis/s3-sync-action@master
         with:
-         AWS_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET }}
-         AWS_REGION: us-east-2
-         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-
-         # path of local file to upload
-         local_path_upload: ./
-
-        
-         # want to zip file/folder before send to S3
-         zip: true
-        
-         # the name of key/object to store in S3
-         name_to_save_on_s3: "release"
-
-                                                
-       
+          args: --acl public-read
+        env:
+          SOURCE_DIR: './artifacts'
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
