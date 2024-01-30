@@ -26,26 +26,34 @@ jobs:
           touch config.js
           echo "${{ secrets.CONFIG_ENV_FILE }}" > config.js
       - run: npm run build
-      
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
 
-      - name: Upload to S3
-        uses: jakejarvis/s3-sync-action@master
+      - name: Upload File to AWS S3
+        uses: ramonpaolo/action-upload-s3@main
         with:
-          args: --acl public-read
-        env:
-          FILE: release.zip
-          #SOURCE_DIR: build
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+         AWS_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET }}
+         AWS_REGION: us-east-2
+         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
 
+         # path of local file to upload
+         local_path_upload: ./
 
-
-      #- name: Upload artifact for deployment job
-        #uses: actions/upload-artifact@v2
-        #with:
-         #name: node-app
-         #path: ./
-
+         # path to upload bucket on aws s3
+         bucket_path_upload: /
+        
+         # is directory to read and upload
+         is_directory: false
+        
+         # want to zip file/folder before send to S3
+         zip: true
+        
+         # the name of key/object to store in S3
+         name_to_save_on_s3: "release"
+        
+         # the ACL to allow access
+         acl: "public-read"
+        
+         # the storage class to save the object
+         storage_class: "STANDARD"
+                                                
+       
