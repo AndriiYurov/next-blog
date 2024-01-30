@@ -27,7 +27,7 @@ jobs:
         run: mkdir -p ./artifacts
 
       - name: Zip artifact for deployment
-        run: zip ./artifacts/release.zip ./home/runner/work/next-blog/next-blog -r
+        run: zip ./artifacts/release.zip /home/runner/work/next-blog/next-blog -r
 
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@master
