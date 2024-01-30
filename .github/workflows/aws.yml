@@ -24,18 +24,22 @@ jobs:
       - run: npm run build
       
 
-      - uses: actions/upload-artifact@v4
+      #- uses: actions/upload-artifact@v4
+        #with:
+         #name: my-artifact
+         #path: ./
+         #compression-level: 0 # no compression
+      - uses: actions/download-artifact@v4
         with:
          name: my-artifact
-         path: ./
-         compression-level: 0 # no compression
+         path: my-artifact
 
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --acl public-read
         env:
-          SOURCE_DIR: '/home/runner/work/next-blog/next-blog/artifact'
+          SOURCE_DIR: 'my-artifact'
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
