@@ -38,22 +38,12 @@ jobs:
          # path of local file to upload
          local_path_upload: ./
 
-         # path to upload bucket on aws s3
-         bucket_path_upload: /
-        
-         # is directory to read and upload
-         is_directory: false
         
          # want to zip file/folder before send to S3
          zip: true
         
          # the name of key/object to store in S3
          name_to_save_on_s3: "release"
-        
-         # the ACL to allow access
-         acl: "public-read"
-        
-         # the storage class to save the object
-         storage_class: "STANDARD"
+
                                                 
        
