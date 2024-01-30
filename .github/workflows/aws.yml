@@ -22,16 +22,12 @@ jobs:
            cache: 'npm'
       - run: npm ci
       
-      - run: |
-          touch config.js
-          echo "${{ secrets.CONFIG_ENV_FILE }}" > config.js
-      - run: npm run build
 
       - name: Make artifact directory
         run: mkdir -p ./artifacts
 
       - name: Zip artifact for deployment
-        run: zip ./artifacts/release.zip ./* -r
+        run: zip ./artifacts/release.zip ${{ github.workspace }} -r
 
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@master
