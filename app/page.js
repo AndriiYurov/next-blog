@@ -8,7 +8,7 @@ async function getBlogs(searchParams) {
   };
   const searchQuery = new URLSearchParams(urlParams).toString();
   // console.log("searchQuery =>", searchQuery);
-  const response = await fetch(`${process.env.API}/blog?${searchQuery}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API}/blog?${searchQuery}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

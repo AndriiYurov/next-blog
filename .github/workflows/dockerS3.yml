@@ -1,0 +1,38 @@
+name: Deploy Images to GHCR
+
+on: workflow_dispatch
+  #push:
+    #branches:
+      #- main
+  #workflow_dispatch:
+
+jobs:
+      push-store-image:
+        runs-on: ubuntu-latest
+        
+        steps:
+          - name: 'Checkout GitHub Action'
+            uses: actions/checkout@main
+
+          - name: 'Login to GitHub Container Registry'
+            uses: docker/login-action@v2
+            with:
+              registry: ghcr.io
+              username: ${{github.actor}}
+              password: ${{secrets.MY_TOKEN}}
+
+          - name: 'Build Inventory Image'
+            run: |
+              docker build . --tag ghcr.io/andriiyurov/my-next-blog:latest
+              docker push ghcr.io/andriiyurov/my-next-blog:latest
+              docker save ghcr.io/andriiyurov/my-next-blog:latest
+               
+          - name: Upload to S3
+            uses: jakejarvis/s3-sync-action@master
+            with:
+               args: --acl public-read
+            env:
+               # SOURCE_DIR: build/
+               AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+               AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+               AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
