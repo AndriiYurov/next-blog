@@ -29,6 +29,6 @@ jobs:
             with:
                 push: true
                 tags: |
-                  ghcr.io/username/package:latest
-                  ghcr.io/username/package:${{ github.sha }}
+                  ghcr.io/andriiyurov/next-blog:latest
+                  ghcr.io/andriiyurov/next-blog:${{ github.sha }}
 
