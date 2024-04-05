@@ -24,10 +24,11 @@ jobs:
               touch .env.local 
               echo "${{ secrets.ENV_FILE }}" > .env.local
 
-          - name: Build and push
-            uses: docker/build-push-action@v5
+          - name: Build and push the Docker image
+            uses: docker/build-push-action@v3
             with:
-             file: ./Dockerfile
-             push: true
-             tags: andriiyurov/my-next-blog:latest
+                push: true
+                tags: |
+                  ghcr.io/username/package:latest
+                  ghcr.io/username/package:${{ github.sha }}
 
