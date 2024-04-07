@@ -28,15 +28,16 @@ jobs:
             uses: docker/build-push-action@v5
             with:
                 context: .
-                #push: true
-                tags: myimage:latest
-                outputs: type=docker,dest=/tmp/myimage.tar
+                push: true
+                tags: |
+                  ghcr.io/andriiyurov/next-blog:latest
+                  ghcr.io/andriiyurov/next-blog:${{ github.sha }}
 
           - name: Upload artifact
             uses: actions/upload-artifact@v3
             with:
                 name: myimage
-                path: /tmp/myimage.tar
+                path: ghcr.io/andriiyurov/next-blog:latest
 
       use:
         runs-on: ubuntu-latest
