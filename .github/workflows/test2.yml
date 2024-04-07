@@ -27,7 +27,6 @@ jobs:
           - name: Build and push the Docker image
             uses: docker/build-push-action@v5
             with:
-                context: .
                 push: true
                 tags: |
                   ghcr.io/andriiyurov/next-blog:latest
@@ -36,4 +35,4 @@ jobs:
           - name: Upload Dist
             uses: actions/upload-artifact@v3
             with:
-                path: /app
+                path: /app/.
