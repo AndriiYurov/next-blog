@@ -32,14 +32,8 @@ jobs:
                 tags: |
                   ghcr.io/andriiyurov/next-blog:latest
                   ghcr.io/andriiyurov/next-blog:${{ github.sha }}
-          - uses: shrink/actions-docker-extract@v2
-            id: extract
-            with:
-                image: ghcr.io/andriiyurov/next-blog:latest
-                path: /app/.
-                destination: dist
-
+         
           - name: Upload Dist
             uses: actions/upload-artifact@v3
             with:
-                path: dist
+                path: /app
