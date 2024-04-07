@@ -37,7 +37,7 @@ jobs:
             uses: actions/upload-artifact@v3
             with:
                 name: myimage
-                path: ghcr.io/andriiyurov/next-blog:latest
+                path: .
 
       use:
         runs-on: ubuntu-latest
