@@ -32,6 +32,9 @@ jobs:
                   ghcr.io/andriiyurov/next-blog:latest
                   ghcr.io/andriiyurov/next-blog:${{ github.sha }}
 
+          
+          - run: docker pull ghcr.io/andriiyurov/next-blog:${{ github.sha }}      
+
           - name: Upload to S3
             uses: jakejarvis/s3-sync-action@master
             with:
