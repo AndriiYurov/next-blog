@@ -28,10 +28,8 @@ jobs:
             uses: docker/build-push-action@v5
             with:
                 context: .
-                push: true
-                tags: |
-                  ghcr.io/andriiyurov/next-blog:latest
-                  ghcr.io/andriiyurov/next-blog:${{ github.sha }}
+                #push: true
+                tags: myimage:latest
                 outputs: type=docker,dest=/tmp/myimage.tar
 
           - name: Upload artifact
