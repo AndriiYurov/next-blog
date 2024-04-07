@@ -1,0 +1,50 @@
+name: Deploy Images to GHCR
+
+on: workflow_dispatch
+  #push:
+    #branches:
+      #- main
+  #workflow_dispatch:
+
+jobs:
+      build:
+        runs-on: ubuntu-latest
+        
+        steps:
+          - name: 'Checkout GitHub Action'
+            uses: actions/checkout@main
+
+          - name: 'Login to GitHub Container Registry'
+            uses: docker/login-action@v3
+            with:
+              registry: ghcr.io
+              username: ${{github.actor}}
+              password: ${{secrets.MY_TOKEN}}
+          - run: |
+              touch .env.local 
+              echo "${{ secrets.ENV_FILE }}" > .env.local
+
+          - name: Build and push the Docker image
+            uses: docker/build-push-action@v5
+            with:
+                context: .
+                push: true
+                tags: |
+                  ghcr.io/andriiyurov/next-blog:latest
+                  ghcr.io/andriiyurov/next-blog:${{ github.sha }}
+          - uses: shrink/actions-docker-extract@v2
+            id: extract
+            with:
+                image: ghcr.io/andriiyurov/next-blog:latest
+                path: /export/.
+
+          - name: Upload to S3
+            uses: jakejarvis/s3-sync-action@master
+            with:
+                args: --acl public-read
+            env:
+                SOURCE_DIR: /export
+                AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+                AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
